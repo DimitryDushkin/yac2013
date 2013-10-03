@@ -31,7 +31,8 @@ module.exports = function (grunt) {
     watch: {
       styles: {
         files: ['<%= yeoman.app %>/assets/css/{,*/}*.css'],
-        tasks: ['copy:styles', 'autoprefixer']
+        //tasks: ['copy:styles', 'autoprefixer']
+        tasks: ['copy:styles']
       },
       livereload: {
         options: {
@@ -50,9 +51,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '.tmp/styles/',
+          cwd: '.tmp/assets/styles/',
           src: '{,*/}*.css',
-          dest: '.tmp/styles/'
+          dest: '.tmp/assets/styles/'
         }]
       }
     },
@@ -155,8 +156,8 @@ module.exports = function (grunt) {
           src: [
             '<%= yeoman.dist %>/assets/js/{,*/}*.js',
             '<%= yeoman.dist %>/assets/css/{,*/}*.css',
-            '<%= yeoman.dist %>/assets/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%= yeoman.dist %>/assets/fonts/*'
+            '<%= yeoman.dist %>/assets/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+            //'<%= yeoman.dist %>/assets/fonts/*'
           ]
         }
       }
@@ -210,15 +211,17 @@ module.exports = function (grunt) {
     htmlmin: {
       dist: {
         options: {
-          /*removeCommentsFromCDATA: true,
-          // https://github.com/yeoman/grunt-usemin/issues/44
-          //collapseWhitespace: true,
-          collapseBooleanAttributes: true,
-          removeAttributeQuotes: true,
-          removeRedundantAttributes: true,
-          useShortDoctype: true,
-          removeEmptyAttributes: true,
-          removeOptionalTags: true*/
+          // removeCommentsFromCDATA: true,
+          // // https://github.com/yeoman/grunt-usemin/issues/44
+          // collapseWhitespace: true,
+          // collapseBooleanAttributes: true,
+          // removeAttributeQuotes: true,
+          // removeRedundantAttributes: true,
+          // useShortDoctype: true,
+          // removeEmptyAttributes: true,
+          // removeOptionalTags: true
+          removeComments: true,
+          collapseWhitespace: true
         },
         files: [{
           expand: true,
@@ -238,10 +241,9 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>',
           src: [
             '*.{ico,png,txt}',
-            '.htaccess',
-            'bower_components/**/*',
-            'images/{,*/}*.{gif,webp}',
-            'styles/fonts/*'
+            'assets/img/{,*/}*.{gif,webp}',
+            'assets/fonts/*',
+            'assets/css/*'
           ]
         }, {
           expand: true,
@@ -255,7 +257,7 @@ module.exports = function (grunt) {
       styles: {
         expand: true,
         cwd: '<%= yeoman.app %>/assets/css',
-        dest: '.tmp/styles/',
+        dest: '.tmp/assets/css/',
         src: '{,*/}*.css'
       }
     },
@@ -277,11 +279,11 @@ module.exports = function (grunt) {
       ]
     },
 
-    cdnify: {
-      dist: {
-        html: ['<%= yeoman.dist %>/*.html']
-      }
-    },
+    // cdnify: {
+    //   dist: {
+    //     html: ['<%= yeoman.dist %>/*.html']
+    //   }
+    // },
     uglify: {
       dist: {
         files: {
@@ -291,6 +293,7 @@ module.exports = function (grunt) {
         }
       }
     }
+    
   });
 
   grunt.registerTask('server', function (target) {
@@ -301,7 +304,6 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'concurrent:server',
-      'autoprefixer',
       'connect:livereload',
       'open',
       'watch'
@@ -311,7 +313,6 @@ module.exports = function (grunt) {
   grunt.registerTask('test', [
     'clean:server',
     'concurrent:test',
-    'autoprefixer',
     'connect:test'
   ]);
 
@@ -319,11 +320,8 @@ module.exports = function (grunt) {
     'clean:dist',
     'useminPrepare',
     'concurrent:dist',
-    'autoprefixer',
     'concat',
     'copy:dist',
-    'cdnify',
-    'ngmin',
     'cssmin',
     'uglify',
     'rev',
