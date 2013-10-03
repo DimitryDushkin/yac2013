@@ -3,3 +3,4 @@ node_modules
 .sass-cache
 *.sublime-project
 app/bower_components
+.DS_store
